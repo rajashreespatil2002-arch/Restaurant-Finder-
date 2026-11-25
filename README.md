@@ -1,49 +1,35 @@
-**Architecture Overview**
-Presentation Layer (Controller)
-Receives HTTP requests from clients (e.g., web or mobile apps).
-Maps REST API endpoints (GET, POST, DELETE).
-Delegates processing to the service layer.
-Returns HTTP responses (JSON) to clients.
+# Restaurant Finder
 
-Service Layer
-Contains business logic and rules.
-Interacts with the repository layer for data operations.
-Handles exceptions such as restaurant or item not found.
-Coordinates operations involving multiple entities or transactions.
+## Application Architecture
 
-Data Access Layer (Repository)
-Interfaces with the database using Spring Data JPA.
-Provides CRUD operations for Restaurant and Item entities.
-Abstracts away SQL queries using JPA and method naming conventions.
+### Controller Layer
+Acts as the entry point of the application by receiving client requests, managing REST API endpoints, and returning responses in JSON format.
 
-Domain Layer (Entity Classes)
-Models the main data structures, i.e., Restaurant and Item.
-Contains JPA annotations for ORM mapping to database tables.
-Includes essential business logic related to domain, e.g., menu management and open/closed status.
+### Business Logic Layer
+Manages restaurant-related operations, processes application requests, and coordinates with the data access layer to execute required tasks.
 
-Database Layer
-MySQL database with two tables: restaurant and item.
-Enforces foreign key relationship with cascade delete.
-Schema created and optionally pre-populated via SQL script (DBLoadScript.sql).
+### Repository Layer
+Handles database communication using Spring Data JPA and provides methods to retrieve, save, update, and delete application data.
 
-**Data Flow**
-1.Client Request:
-A client sends an HTTP request to a REST endpoint, e.g., GET /api/v1/restaurants.
+### Entity Layer
+Contains the main application models, such as Restaurant and Item, which represent the data stored in the database using JPA mappings.
 
-2.Controller Handling:
-The RestaurantController receives this request and calls the appropriate method on the RestaurantService.
+### Database Management
+Uses MySQL to maintain restaurant information and related records while managing data relationships and consistency.
 
-3.Business Logic Processing:
-The RestaurantService performs the required business logic. For retrieving restaurants, it calls findAll() on the RestaurantRepository.
+## Application Workflow
 
-4.Database Interaction:
-The RestaurantRepository interfaces with MySQL using JPA to fetch the restaurant data and their menu items.
+**1. Request Initiation:** The client sends a request to the application's REST API.
 
-5.Data Mapping:
-JPA maps SQL result sets to Java entities (Restaurant and Item).
+**2. Request Processing:** The controller receives the request and forwards it to the appropriate business logic method.
 
-6.Returning Response:
-The service returns the data to the controller, which sends it back as JSON in the HTTP response.
+**3. Service Execution:** The service layer processes the request and performs the required operations.
 
-7.Error Handling:
-If something goes wrong (e.g., restaurant not found), exceptions propagate from repository to service to controller, which returns appropriate HTTP error responses.
+**4. Data Retrieval:** The repository layer interacts with the database through Spring Data JPA.
+
+**5. Object Mapping:** Retrieved database records are converted into Java entity objects.
+
+**6. Response Delivery:** The processed information is returned to the client as a JSON response.
+
+**7. Exception Management:** Application errors are handled to ensure appropriate responses and smooth execution.
+
